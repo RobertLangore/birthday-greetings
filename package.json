@@ -1,0 +1,40 @@
+{
+  "name": "birthday-greetings",
+  "version": "1.0.0",
+  "description": "Birthday greetings",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start:build": "tsc -w",
+    "start:run": "nodemon build/index.js",
+    "start": "concurrently npm:start:*",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobertLangore/birthday-greetings.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RobertLangore/birthday-greetings/issues"
+  },
+  "homepage": "https://github.com/RobertLangore/birthday-greetings#readme",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.15.18",
+    "@types/nodemailer": "^6.4.17",
+    "concurrently": "^9.1.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.10",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "csv-parser": "^3.2.0",
+    "nodemailer": "^7.0.3"
+  }
+}
