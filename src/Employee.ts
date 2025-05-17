@@ -2,7 +2,12 @@
 import { areSameDates } from './utils';
 
 export class Employee {
-  constructor(public firstName: string, public lastName: string, public dateOfBirth: Date, public email: string) {}
+  constructor(
+    public firstName: string,
+    public lastName: string,
+    public dateOfBirth: Date | null,
+    public email: string
+  ) {}
 
   getFirstName(): string {
     return this.firstName;
@@ -16,13 +21,19 @@ export class Employee {
     return this.email;
   }
 
-  isBirthday(date: Date): boolean {
+  isBirthday(date: Date | null): boolean {
     return areSameDates(this.dateOfBirth, date);
   }
 
   toString(): string {
-    return `Employee ${this.firstName} ${this.lastName} <${
-      this.email
-    }> born ${this.dateOfBirth.getFullYear()}-${this.dateOfBirth.getMonth()}-${this.dateOfBirth.getDate()}`;
+    let str = `Employee ${this.firstName} ${this.lastName} <${this.email}>`;
+
+    if (this.dateOfBirth) {
+      str += ` born ${this.dateOfBirth.getFullYear()}-${this.dateOfBirth.getMonth() + 1}-${this.dateOfBirth.getDate()}`;
+    } else {
+      str += ' (birthday unknown)';
+    }
+
+    return str;
   }
 }

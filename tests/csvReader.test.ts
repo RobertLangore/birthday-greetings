@@ -7,10 +7,10 @@ const dataHeaders = ['last_name', 'first_name', 'date_of_birth', 'email'];
 const csvFileReader = new CsvFileReader<EmployeesDataTypesIn>(dataFilename, dataHeaders);
 
 describe('testing loading data from file', () => {
-  test('there should be 2 records', () => {
+  test('there should be 4 records', () => {
     (async () => {
       await csvFileReader.read();
-      expect(csvFileReader.data.length).toBe(2);
+      expect(csvFileReader.data.length).toBe(4);
     })();
   });
 });

@@ -13,7 +13,13 @@ interface MailerOptions {
 export class BirthdayService {
   constructor(public employeesRepository: EmployeesRepository, public mailerConfig: MailerConfigType) {}
 
-  sendGreetings(birthday: Date) {
+  sendGreetings(birthday: Date | null) {
+    if (!birthday) {
+      console.log('Birthday not a valid date.');
+      // throw new Error('Birthday not a valid date.');
+      return;
+    }
+
     const employeesBirthday = this.employeesRepository.findWithBirthday(birthday);
 
     const transporter = nodemailer.createTransport(this.mailerConfig);
@@ -39,6 +45,8 @@ export class BirthdayService {
           text: emailText,
           html: emailHtml,
         };
+
+        console.log('Happy Birthday: ' + employee);
 
         // const emailResult = await transporter.sendMail(mailerOptions);
         // console.log('Email sent: ', emailResult.messageId);

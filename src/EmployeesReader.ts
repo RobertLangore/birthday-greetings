@@ -1,7 +1,7 @@
 import { CsvFileReader } from './CsvFileReader';
 import { Employee } from './Employee';
 import { EmployeesDataTypesIn, EmployeesDataTypes } from './DataTypes';
-import { dateStringToDate } from './utils';
+import { dateFromString } from './utils';
 
 interface DataReader<T> {
   read(): void;
@@ -27,11 +27,11 @@ export class EmployeesReader {
     return this.data.map((record) => new Employee(record.firstName, record.lastName, record.dateOfBirth, record.email));
   }
 
-  mapRecord(record: EmployeesDataTypesIn) {
+  mapRecord(record: EmployeesDataTypesIn): EmployeesDataTypes {
     return {
       lastName: record.last_name,
       firstName: record.first_name,
-      dateOfBirth: new Date(record.date_of_birth),
+      dateOfBirth: dateFromString(record.date_of_birth),
       email: record.email,
     };
   }

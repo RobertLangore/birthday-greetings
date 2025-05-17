@@ -27,7 +27,7 @@ export class Birthday {
     return this.date.getMonth();
   }
 
-  isSamey(date: Date): boolean {
+  isSameDate(date: Date): boolean {
     return date.getDate() === this.getDate() && date.getMonth() === this.getMonth();
   }
 }

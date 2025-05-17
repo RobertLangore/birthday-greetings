@@ -8,7 +8,7 @@ export interface EmployeesDataTypesIn {
 export interface EmployeesDataTypes {
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
+  dateOfBirth: Date | null;
   email: string;
 }
 
