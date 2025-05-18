@@ -1,29 +1,19 @@
 import fs from 'fs';
-import csvParser from 'csv-parser';
 
-export class CsvFileReader<T> {
-  data: T[] = [];
+export class CsvFileReader {
+  data: string[][] = [];
 
-  constructor(private filename: string, private headers: string[]) {}
+  constructor(private filename: string, private skipLines = 1) {}
 
-  async read(): Promise<T[]> {
-    return new Promise((resolve, reject) => {
-      fs.createReadStream(this.filename)
-        .pipe(
-          csvParser({
-            skipLines: 1,
-            headers: this.headers,
-            mapValues: ({ value }) => value.trim(),
-          })
-        )
-        .on('headers', (headers) => {
-          // console.log('Headers: ', headers);
-        })
-        .on('data', (row) => this.data.push(row))
-        .on('end', () => {
-          resolve(this.data);
-        })
-        .on('error', reject);
-    });
+  read(): void {
+    this.data = fs
+      .readFileSync(this.filename, {
+        encoding: 'utf-8',
+      })
+      .split('\n')
+      .slice(this.skipLines)
+      .map((row: string): string[] => {
+        return row.split(',').map((value) => value.trim());
+      });
   }
 }

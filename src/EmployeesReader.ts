@@ -1,38 +1,37 @@
 import { CsvFileReader } from './CsvFileReader';
 import { Employee } from './Employee';
-import { EmployeesDataTypesIn, EmployeesDataTypes } from './DataTypes';
+import { EmployeeDataType } from './DataTypes';
 import { dateFromString } from './utils';
 
-interface DataReader<T> {
+interface DataReader {
   read(): void;
-  data: T[];
+  data: string[][];
 }
 
 export class EmployeesReader {
-  static fromCsv(filename: string, headers: string[]): EmployeesReader {
-    return new EmployeesReader(new CsvFileReader<EmployeesDataTypesIn>(filename, headers));
+  static fromCsv(filename: string): EmployeesReader {
+    return new EmployeesReader(new CsvFileReader(filename));
   }
 
-  data: EmployeesDataTypes[] = [];
+  data: EmployeeDataType[] = [];
 
-  constructor(public reader: DataReader<EmployeesDataTypesIn>) {}
+  constructor(public reader: DataReader) {}
 
-  async load(): Promise<void> {
-    await this.reader.read();
+  mapRecord(row: string[]): EmployeeDataType {
+    return {
+      lastName: row[0],
+      firstName: row[1],
+      dateOfBirth: dateFromString(row[2]),
+      email: row[3],
+    };
+  }
 
-    this.data = this.reader.data.map((record: EmployeesDataTypesIn): EmployeesDataTypes => this.mapRecord(record));
+  load(): void {
+    this.reader.read();
+    this.data = this.reader.data.map((record) => this.mapRecord(record));
   }
 
   getRepository(): Employee[] {
     return this.data.map((record) => new Employee(record.firstName, record.lastName, record.dateOfBirth, record.email));
-  }
-
-  mapRecord(record: EmployeesDataTypesIn): EmployeesDataTypes {
-    return {
-      lastName: record.last_name,
-      firstName: record.first_name,
-      dateOfBirth: dateFromString(record.date_of_birth),
-      email: record.email,
-    };
   }
 }
