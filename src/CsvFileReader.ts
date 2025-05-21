@@ -1,9 +1,13 @@
 import fs from 'fs';
 
 export class CsvFileReader {
-  data: string[][] = [];
+  private data: string[][] = [];
 
   constructor(private filename: string, private skipLines = 1) {}
+
+  getData(): string[][] {
+    return this.data
+  }
 
   read(): void {
     this.data = fs

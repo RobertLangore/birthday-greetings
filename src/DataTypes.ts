@@ -1,4 +1,4 @@
-export interface EmployeeDataType {
+export interface EmployeeRecord {
   firstName: string;
   lastName: string;
   dateOfBirth: Date | null;

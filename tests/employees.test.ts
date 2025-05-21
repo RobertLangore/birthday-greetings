@@ -10,7 +10,7 @@ describe('testing loading employees data', () => {
     const employees = EmployeesReader.fromCsv(dataFilename);
     employees.load();
 
-    expect(employees.data.length).toBe(4);
+    expect(employees.getData().length).toBe(4);
   });
 
   test('there should be 4 employees', () => {

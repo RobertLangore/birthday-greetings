@@ -1,34 +1,38 @@
 import { CsvFileReader } from './CsvFileReader';
 import { Employee } from './Employee';
-import { EmployeeDataType } from './DataTypes';
+import { EmployeeRecord } from './DataTypes';
 import { dateFromString } from './utils';
 
 interface DataReader {
   read(): void;
-  data: string[][];
+  getData(): string[][];
 }
 
 export class EmployeesReader {
+  private data: EmployeeRecord[] = [];
+
+  constructor(private reader: DataReader) {}
+
   static fromCsv(filename: string): EmployeesReader {
     return new EmployeesReader(new CsvFileReader(filename));
   }
 
-  data: EmployeeDataType[] = [];
+  load(): void {
+    this.reader.read();
+    this.data = this.reader.getData().map(this.mapRecord);
+  }
 
-  constructor(public reader: DataReader) {}
+  getData(): EmployeeRecord[] {
+    return this.data;
+  }
 
-  mapRecord(row: string[]): EmployeeDataType {
+  mapRecord(row: string[]): EmployeeRecord {
     return {
       lastName: row[0],
       firstName: row[1],
       dateOfBirth: dateFromString(row[2]),
       email: row[3],
     };
-  }
-
-  load(): void {
-    this.reader.read();
-    this.data = this.reader.data.map((record) => this.mapRecord(record));
   }
 
   getRepository(): Employee[] {

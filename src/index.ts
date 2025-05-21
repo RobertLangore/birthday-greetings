@@ -24,5 +24,4 @@ const employeesRepository = new EmployeesRepository(employees.getRepository());
 // employeesRepository.listAll();
 
 const birthdayService = new BirthdayService(employeesRepository, mailerConfig);
-
 birthdayService.sendGreetings(birthday);
