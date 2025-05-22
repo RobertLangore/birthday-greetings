@@ -1,6 +1,6 @@
 import { CsvFileReader } from '../src/CsvFileReader';
+import { dataFilename } from '../src/appConfig';
 
-const dataFilename = './data/employees.csv';
 const csvFileReader = new CsvFileReader(dataFilename);
 
 describe('testing loading data from file', () => {

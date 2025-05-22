@@ -1,17 +1,10 @@
 import nodemailer from 'nodemailer';
 import { EmployeesRepository } from './EmployeesRepository';
-import { MailerConfigType } from './DataTypes';
-
-interface MailerOptions {
-  from: string;
-  subject: string;
-  to: string;
-  text: string;
-  html: string;
-}
+import { MailerOptions } from './DataTypes';
+import { EmailService } from './EmailService';
 
 export class BirthdayService {
-  constructor(public employeesRepository: EmployeesRepository, public mailerConfig: MailerConfigType) {}
+  constructor(private employeesRepository: EmployeesRepository, private emailService: EmailService) {}
 
   sendGreetings(birthday: Date | null) {
     if (!birthday) {
@@ -22,8 +15,6 @@ export class BirthdayService {
 
     const employeesBirthday = this.employeesRepository.findWithBirthday(birthday);
 
-    const transporter = nodemailer.createTransport(this.mailerConfig);
-
     let mailerOptions: MailerOptions;
     let emailTo: string, emailText: string, emailHtml: string;
 
@@ -33,24 +24,21 @@ export class BirthdayService {
     const emailBodyTemplate = 'Happy Birthday, dear %NAME%';
 
     employeesBirthday.forEach((employee) => {
-      (async () => {
-        emailTo = `"${employee.getFirstName()} ${employee.getLastName()}" <${employee.getEmail}>`;
-        emailText = emailBodyTemplate.replace('%NAME%', `${employee.getFirstName()} ${employee.getLastName()}`);
-        emailHtml = `<div>${emailText}</div>`;
+      emailTo = `"${employee.getFirstName()} ${employee.getLastName()}" <${employee.getEmail}>`;
+      emailText = emailBodyTemplate.replace('%NAME%', `${employee.getFirstName()} ${employee.getLastName()}`);
+      emailHtml = `<div>${emailText}</div>`;
 
-        mailerOptions = {
-          from: emailFrom,
-          subject: emailSubject,
-          to: emailTo,
-          text: emailText,
-          html: emailHtml,
-        };
+      mailerOptions = {
+        from: emailFrom,
+        subject: emailSubject,
+        to: emailTo,
+        text: emailText,
+        html: emailHtml,
+      };
 
-        console.log('Happy Birthday: ' + employee);
+      console.log('Happy Birthday: ' + employee);
 
-        // const emailResult = await transporter.sendMail(mailerOptions);
-        // console.log('Email sent: ', emailResult.messageId);
-      })();
+      this.emailService.sendEmail(mailerOptions);
     });
   }
 }

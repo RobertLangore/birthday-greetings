@@ -5,7 +5,7 @@ export interface EmployeeRecord {
   email: string;
 }
 
-export interface MailerConfigType {
+export interface MailerConfig {
   host: string;
   port: number;
   secure: boolean;
@@ -13,4 +13,12 @@ export interface MailerConfigType {
     user: string;
     pass: string;
   };
+}
+
+export interface MailerOptions {
+  from: string;
+  subject: string;
+  to: string;
+  text: string;
+  html: string;
 }

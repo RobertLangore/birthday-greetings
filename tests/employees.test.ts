@@ -2,41 +2,29 @@ import { Employee } from './../src/Employee';
 import { EmployeesReader } from './../src/EmployeesReader';
 import { EmployeesRepository } from './../src/EmployeesRepository';
 import { dateFromString } from '../src/utils';
+import { dataFilename } from '../src/appConfig';
 
-const dataFilename = './data/employees.csv';
+const employees = EmployeesReader.fromCsv(dataFilename);
+employees.load();
+
+const employeesRepository = new EmployeesRepository(employees.getRepository());
 
 describe('testing loading employees data', () => {
   test('there should be 4 records read', () => {
-    const employees = EmployeesReader.fromCsv(dataFilename);
-    employees.load();
-
     expect(employees.getData().length).toBe(4);
   });
 
   test('there should be 4 employees', () => {
-    const employees = EmployeesReader.fromCsv(dataFilename);
-    employees.load();
-
-    const employeesRepository = new EmployeesRepository(employees.getRepository());
-
     expect(employeesRepository.employees.length).toBe(4);
   });
 
   test('there should be 3 employee with valid birthday', () => {
-    const employees = EmployeesReader.fromCsv(dataFilename);
-    employees.load();
-
-    const employeesRepository = new EmployeesRepository(employees.getRepository());
-
     const employeesValidBirthday = employeesRepository.employees.filter((employee) => employee.dateOfBirth !== null);
     expect(employeesValidBirthday.length).toBe(3);
   });
 
   test('there should be 2 employees with given birthday', () => {
     const birthday = dateFromString('1982/10/08');
-
-    const employees = EmployeesReader.fromCsv(dataFilename);
-    employees.load();
 
     const employeesRepository = new EmployeesRepository(employees.getRepository());
     const employeesBirthday = employeesRepository.findWithBirthday(birthday);
