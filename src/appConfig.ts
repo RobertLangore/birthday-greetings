@@ -13,3 +13,9 @@ export const mailerConfig: MailerConfig = {
     pass: '<userPass>',
   },
 };
+
+export const mailConfig = {
+  from: '"Test" <testing@example.com>',
+  subject: 'Happy Birthday',
+  body: 'Happy Birthday, dear %NAME%',
+};

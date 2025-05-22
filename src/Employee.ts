@@ -17,6 +17,10 @@ export class Employee {
     return this.lastName;
   }
 
+  getFullName(): string {
+    return `${this.lastName} ${this.lastName}`;
+  }
+
   getEmail(): string {
     return this.email;
   }

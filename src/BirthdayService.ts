@@ -1,15 +1,15 @@
-import nodemailer from 'nodemailer';
 import { EmployeesRepository } from './EmployeesRepository';
 import { MailerOptions } from './DataTypes';
 import { EmailService } from './EmailService';
+import { mailConfig } from './appConfig';
 
 export class BirthdayService {
   constructor(private employeesRepository: EmployeesRepository, private emailService: EmailService) {}
 
   sendGreetings(birthday: Date | null) {
     if (!birthday) {
-      console.log('Birthday not a valid date.');
-      // throw new Error('Birthday not a valid date.');
+      console.log('Birthday is not a valid date.');
+      // throw new Error('Birthday is not a valid date.');
       return;
     }
 
@@ -18,19 +18,14 @@ export class BirthdayService {
     let mailerOptions: MailerOptions;
     let emailTo: string, emailText: string, emailHtml: string;
 
-    const emailFrom = '"Test" <testing@example.com>';
-    const emailSubject = 'Happy Birthday';
-
-    const emailBodyTemplate = 'Happy Birthday, dear %NAME%';
-
     employeesBirthday.forEach((employee) => {
-      emailTo = `"${employee.getFirstName()} ${employee.getLastName()}" <${employee.getEmail}>`;
-      emailText = emailBodyTemplate.replace('%NAME%', `${employee.getFirstName()} ${employee.getLastName()}`);
+      emailTo = `"${employee.getFullName()}" <${employee.getEmail}>`;
+      emailText = mailConfig.body.replace('%NAME%', `${employee.getFullName()}`);
       emailHtml = `<div>${emailText}</div>`;
 
       mailerOptions = {
-        from: emailFrom,
-        subject: emailSubject,
+        from: mailConfig.from,
+        subject: mailConfig.subject,
         to: emailTo,
         text: emailText,
         html: emailHtml,
